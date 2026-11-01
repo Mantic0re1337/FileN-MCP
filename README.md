@@ -56,9 +56,19 @@ The server never hardcodes credentials. Provide them via environment variables:
 
 | Variable | Purpose |
 | --- | --- |
-| `FILEN_API_KEY` | Your Filen API key (Settings → Developer). Preferred option. |
+| `FILEN_API_KEY` | Your Filen API key. Preferred option — no 2FA needed on subsequent calls. |
 | `FILEN_EMAIL` + `FILEN_PASSWORD` | Account login instead of an API key. |
-| `FILEN_2FA_CODE` | Optional 2FA code, required if your account has two-factor authentication enabled. |
+| `FILEN_2FA_CODE` | 2FA code, required with email/password login if your account has two-factor authentication enabled. |
+
+### Getting an API key
+
+Per the [official Filen API docs](https://docs.filen.io/docs/api/guides/authentication/), the API key is returned by the `POST /v3/login` response (email + derived password + 2FA code), and each API call is then authenticated with `Authorization: Bearer <api_key>`. In practice the easiest way to obtain it is the **Filen CLI**: log in once (including 2FA) and run `filen export-api-key` (see [docs.cli.filen.io](https://docs.cli.filen.io/) and the [rclone docs](https://rclone.org/filen/), which state this is currently only possible via the CLI). The SDK does the login under the hood when you call `filen.init({ apiKey })`.
+
+Notes:
+
+- The API key itself needs **no 2FA** — fetch it once and set it as `FILEN_API_KEY` in your MCP client config; the server authorizes automatically on every start.
+- The API key becomes invalid if you change your Filen account password — then export a new one.
+- Treat the API key like a password: only in the MCP client config or a git-ignored `.env`, never in the repo.
 
 If neither `FILEN_API_KEY` nor `FILEN_EMAIL` + `FILEN_PASSWORD` is set, the server prints a clear error and exits with code 1.
 
