@@ -1,4 +1,4 @@
-# FileN-MCP
+# FileN-MCP Server
 
 Unofficial [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server for [Filen](https://filen.io) (filen.io), built on the official [`@filen/sdk`](https://www.npmjs.com/package/@filen/sdk) TypeScript SDK.
 
